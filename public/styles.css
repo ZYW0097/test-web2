@@ -44,4 +44,10 @@ button {
 
 button:hover {
     background-color: #0056b3;
+
+#successMessage {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    }
 }
