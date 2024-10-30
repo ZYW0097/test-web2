@@ -19,6 +19,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     useUnifiedTopology: true,
 })
 .then(() => {
+    mongoose.set('strictQuery', false); // 或者設為 true
     console.log('MongoDB connected');
 })
 .catch(err => {
