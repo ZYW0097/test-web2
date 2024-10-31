@@ -16,7 +16,7 @@
                 <p>時間: <%= reservation.time %></p>
                 <p>成人: <%= reservation.adults %></p>
                 <p>小孩: <%= reservation.children || 0 %></p>
-                <p>兒童椅: <%= reservation.highChair %></p>
+                <p>兒童椅: <%= reservation.highChair || 0 %></p>
             </li>
         <% }) %>
     </ul>
