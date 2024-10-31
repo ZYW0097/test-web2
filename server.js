@@ -62,14 +62,14 @@ app.post('/reservations', async (req, res) => {
     try {
         const reservation = new Reservation({ name, phone, date, time, adults, children, highChair });
         await reservation.save();
-        res.status(201).redirect('/view');
+        res.status(201).json({ message: '訂位成功' }); // 返回成功消息
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
 
 // 查看訂位頁面
-app.get('/view', async (req, res) => {
+app.get('/views', async (req, res) => {
     try {
         const reservations = await Reservation.find();
         res.render('reservations', { reservations });
@@ -79,7 +79,7 @@ app.get('/view', async (req, res) => {
 });
 
 // 密碼保護頁面
-app.post('/protected-view', async (req, res) => {
+app.post('/protected-views', async (req, res) => {
     const { password } = req.body;
     if (password === '83094123') {
         try {
