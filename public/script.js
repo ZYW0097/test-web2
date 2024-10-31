@@ -53,13 +53,14 @@ document.getElementById('viewReservationsBtn').onclick = function() {
 document.getElementById('passwordForm').onsubmit = function(event) {
     event.preventDefault();
     const password = document.getElementById('password').value;
+    console.log("Submitting password:", password); // 添加這一行
 
-    // 使用 AJAX 發送密碼到伺服器進行驗證
     $.post('/protected-views', { password: password })
         .done(function() {
             window.location.href = '/view'; // 跳轉到查看訂位頁面
         })
-        .fail(function() {
+        .fail(function(jqXHR) {
+            console.log("Error response:", jqXHR); // 添加這一行
             alert('密碼錯誤'); // 顯示錯誤提示
         });
 };
