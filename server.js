@@ -1,9 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // 引入 mongoose
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 
+const connectToDatabase = require('./database'); // 引入連接設定
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,18 +14,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
+// 設定 views 資料夾
+app.set('views', path.join(__dirname, 'views'));
+
 // 連接到 MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => {
-    mongoose.set('strictQuery', false); // 或者設為 true
-    console.log('MongoDB connected');
-})
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-});
+connectToDatabase();
 
 // 訂位模型
 const reservationSchema = new mongoose.Schema({
@@ -37,7 +31,7 @@ const reservationSchema = new mongoose.Schema({
     highChair: { type: Number, default: 0 },
 });
 
-const Reservation = mongoose.model('Reservation', reservationSchema);
+const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings');
 
 // 主頁面
 app.get('/', (req, res) => {
@@ -75,21 +69,26 @@ app.post('/reservations', async (req, res) => {
 });
 
 // 查看訂位頁面
-app.get('/view', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'view.html'));
+app.get('/view', async (req, res) => {
+    try {
+        const reservations = await Reservation.find();
+        res.render('reservations', { reservations });
+    } catch (error) {
+        res.status(500).send('無法載入訂位資料');
+    }
 });
 
 // 密碼保護頁面
-app.post('/protected-view', (req, res) => {
+app.post('/protected-view', async (req, res) => {
     const { password } = req.body;
     if (password === '83094123') {
-        Reservation.find()
-            .then(reservations => {
-                res.render('reservations', { reservations });
-            })
-            .catch(err => {
-                res.status(500).json({ message: err.message });
-            });
+        try {
+            const reservations = await Reservation.find();
+            res.render('reservations', { reservations });
+        } catch (err) {
+            console.error('Error fetching reservations:', err);
+            res.status(500).json({ message: '無法載入訂位資料' });
+        }
     } else {
         res.status(401).send('密碼錯誤');
     }
