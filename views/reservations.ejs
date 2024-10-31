@@ -24,15 +24,5 @@
             </div>
         <% }) %>
     </div>
-
-    <script>
-        function formatTime(time) {
-            // 假設 time 是 24 小時制的字符串，例如 "14:30"
-            const [hours, minutes] = time.split(':').map(Number);
-            const period = hours >= 12 ? '下午' : '上午';
-            const formattedHours = hours % 12 || 12; // 將 0 轉換為 12
-            return `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
-        }
-    </script>
 </body>
 </html>
