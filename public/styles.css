@@ -9,23 +9,28 @@ h1 {
     color: #333;
 }
 
-ul {
-    list-style-type: none; /* 移除預設的點 */
-    padding: 0;
-    margin: 0;
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-li {
-    background-color: #fff; /* 設定背景顏色 */
-    border: 1px solid #ddd; /* 設定邊框 */
-    border-radius: 5px; /* 圓角 */
-    padding: 15px; /* 內邊距 */
-    margin-bottom: 15px; /* 間隔 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+label {
+    display: block;
+    margin-bottom: 5px;
 }
 
-p {
-    margin: 5px 0; /* 段落的上下邊距 */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 button {
@@ -39,10 +44,10 @@ button {
 
 button:hover {
     background-color: #0056b3;
-}
 
 #successMessage {
     color: green;
     font-weight: bold;
     margin-top: 10px;
+    }
 }
