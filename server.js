@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+app.set('views', './views'); // 確保此路徑與您的 views 資料夾相符
 
 // 設定 views 資料夾
 app.set('views', path.join(__dirname, 'views'));
@@ -69,7 +70,7 @@ app.post('/reservations', async (req, res) => {
 });
 
 // 查看訂位頁面
-app.get('/views', async (req, res) => {
+app.get('/view', async (req, res) => {
     try {
         const reservations = await Reservation.find();
         res.render('reservations', { reservations });
