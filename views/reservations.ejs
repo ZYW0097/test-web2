@@ -1,0 +1,33 @@
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看訂位</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>訂位清單</h1>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>電話</th>
+            <th>日期</th>
+            <th>時間</th>
+            <th>大人數量</th>
+            <th>小孩數量</th>
+            <th>兒童椅數量</th>
+        </tr>
+        <% reservations.forEach(reservation => { %>
+            <tr>
+                <td><%= reservation.name %></td>
+                <td><%= reservation.phone %></td>
+                <td><%= reservation.date.toLocaleDateString() %></td>
+                <td><%= reservation.time %></td>
+                <td><%= reservation.adults %></td>
+                <td><%= reservation.children %></td>
+                <td><%= reservation.highChair %></td>
+            </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
