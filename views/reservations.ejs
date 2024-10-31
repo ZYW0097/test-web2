@@ -8,17 +8,17 @@
 <body>
     <h1>訂位列表</h1>
     <ul>
-        <% reservations.forEach(reservation => { %>
+        <% reservations.reverse().forEach(reservation => { %>
             <li>
                 <p>名稱: <%= reservation.name %></p>
                 <p>電話: <%= reservation.phone %></p>
-                <p>日期: <%= reservation.date %></p>
+                <p>日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %></p>
                 <p>時間: <%= reservation.time %></p>
                 <p>成人: <%= reservation.adults %></p>
-                <p>小孩: <%= reservation.children %></p>
+                <p>小孩: <%= reservation.children || 0 %></p>
                 <p>兒童椅: <%= reservation.highChair %></p>
             </li>
         <% }) %>
-</ul>
+    </ul>
 </body>
 </html>
