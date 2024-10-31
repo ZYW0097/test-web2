@@ -3,22 +3,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>查看訂位</title>
-    <link rel="stylesheet" href="/view.css">
+    <link rel="stylesheet" href="view.css">
 </head>
 <body>
     <h1>訂位列表</h1>
+
     <div class="reservations-container">
         <% reservations.reverse().forEach(reservation => { %>
             <div class="reservation-card">
                 <p>名稱: <%= reservation.name %></p>
-                <p>電話: <%= reservation.phone %></p>
-                <p>日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %></p>
-                <p>時間: <%= reservation.time %></p>
+                <p>電話: <%= reservation.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1-$2-$3') %></p> <!-- 格式化電話 -->
+                <p>
+                    日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %>
+                    (<%= ['日', '一', '二', '三', '四', '五', '六'][new Date(reservation.date).getDay()] %>) <!-- 星期幾 -->
+                </p>
+                <p>時間: <%= formatTime(reservation.time) %></p> <!-- 格式化時間 -->
                 <p>成人: <%= reservation.adults %></p>
                 <p>小孩: <%= reservation.children || 0 %></p>
                 <p>兒童椅: <%= reservation.highChair || 0 %></p>
             </div>
         <% }) %>
     </div>
+
+    <script>
+        function formatTime(time) {
+            // 假設 time 是 24 小時制的字符串，例如 "14:30"
+            const [hours, minutes] = time.split(':').map(Number);
+            const period = hours >= 12 ? '下午' : '上午';
+            const formattedHours = hours % 12 || 12; // 將 0 轉換為 12
+            return `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
+        }
+    </script>
 </body>
 </html>
