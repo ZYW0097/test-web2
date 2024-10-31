@@ -6,28 +6,19 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>訂位清單</h1>
-    <table>
-        <tr>
-            <th>姓名</th>
-            <th>電話</th>
-            <th>日期</th>
-            <th>時間</th>
-            <th>大人數量</th>
-            <th>小孩數量</th>
-            <th>兒童椅數量</th>
-        </tr>
+    <h1>訂位列表</h1>
+    <ul>
         <% reservations.forEach(reservation => { %>
-            <tr>
-                <td><%= reservation.name %></td>
-                <td><%= reservation.phone %></td>
-                <td><%= reservation.date.toLocaleDateString() %></td>
-                <td><%= reservation.time %></td>
-                <td><%= reservation.adults %></td>
-                <td><%= reservation.children %></td>
-                <td><%= reservation.highChair %></td>
-            </tr>
-        <% }); %>
-    </table>
+            <li>
+                <p>名稱: <%= reservation.name %></p>
+                <p>電話: <%= reservation.phone %></p>
+                <p>日期: <%= reservation.date %></p>
+                <p>時間: <%= reservation.time %></p>
+                <p>成人: <%= reservation.adults %></p>
+                <p>小孩: <%= reservation.children %></p>
+                <p>兒童椅: <%= reservation.highChair %></p>
+            </li>
+        <% }) %>
+</ul>
 </body>
 </html>
