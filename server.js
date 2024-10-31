@@ -101,6 +101,14 @@ app.get('/view', async (req, res) => {
     }
 });
 
+const formatTime = (time) => {
+    const [hour, minute] = time.split(':');
+    const hourInt = parseInt(hour);
+    const suffix = hourInt >= 12 ? '下午' : '上午';
+    const formattedHour = hourInt % 12 || 12; // 12小時制
+    return `${formattedHour}:${minute} ${suffix}`;
+};
+
 // 啟動伺服器
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
