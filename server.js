@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session'); // 引入 express-session
 require('dotenv').config();
 
 const connectToDatabase = require('./database');
@@ -14,6 +15,13 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// 設定 session
+app.use(session({
+    secret: 'your-secret-key', // 替換為您的秘密金鑰
+    resave: false,
+    saveUninitialized: true,
+}));
 
 // 連接到 MongoDB
 connectToDatabase();
@@ -78,21 +86,21 @@ app.post('/protected-views', (req, res) => {
 });
 
 // 查看訂位頁面
-app.post('/protected-views', async (req, res) => {
-    const { password } = req.body;
-    if (password === '83094123') {
-        // 密碼正確的邏輯
-        try {
-            const reservations = await Reservation.find();
-            res.render('reservations', { reservations });
-        } catch (err) {
-            console.error('Error fetching reservations:', err);
-            res.status(500).json({ message: '無法載入訂位資料' });
-        }
-    } else {
-        res.status(401).send('密碼錯誤');
+app.get('/view', async (req, res) => {
+    // 檢查 session 是否存在
+    if (!req.session.passwordCorrect) {
+        return res.status(403).send('未經授權，請先輸入密碼');
+    }
+
+    try {
+        const reservations = await Reservation.find();
+        res.render('reservations', { reservations });
+    } catch (err) {
+        console.error('Error fetching reservations:', err);
+        res.status(500).json({ message: '無法載入訂位資料' });
     }
 });
+
 // 啟動伺服器
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
