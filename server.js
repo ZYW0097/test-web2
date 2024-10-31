@@ -85,6 +85,15 @@ app.post('/protected-views', (req, res) => {
     }
 });
 
+// 格式化時間的函數
+const formatTime = (time) => {
+    const [hour, minute] = time.split(':');
+    const hourInt = parseInt(hour);
+    const suffix = hourInt >= 12 ? '下午' : '上午';
+    const formattedHour = hourInt % 12 || 12; // 12小時制
+    return `${formattedHour}:${minute} ${suffix}`;
+};
+
 // 查看訂位頁面
 app.get('/view', async (req, res) => {
     // 檢查 session 是否存在
@@ -94,20 +103,13 @@ app.get('/view', async (req, res) => {
 
     try {
         const reservations = await Reservation.find();
-        res.render('reservations', { reservations });
+        // 將 formatTime 函數傳遞給 EJS
+        res.render('reservations', { reservations, formatTime }); 
     } catch (err) {
         console.error('Error fetching reservations:', err);
         res.status(500).json({ message: '無法載入訂位資料' });
     }
 });
-
-const formatTime = (time) => {
-    const [hour, minute] = time.split(':');
-    const hourInt = parseInt(hour);
-    const suffix = hourInt >= 12 ? '下午' : '上午';
-    const formattedHour = hourInt % 12 || 12; // 12小時制
-    return `${formattedHour}:${minute} ${suffix}`;
-};
 
 // 啟動伺服器
 app.listen(PORT, () => {
