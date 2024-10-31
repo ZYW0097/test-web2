@@ -1,44 +1,52 @@
 <html lang="zh-TW">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <title>訂位系統</title>
-    </head>
-    <body>
-        <h1>訂位系統</h1>
-        <form id="reservationForm" action="/reservations" method="POST">
-            <label for="name">姓名：</label>
-            <input type="text" id="name" name="name" required>
-    
-            <label for="phone">電話：</label>
-            <input type="text" id="phone" name="phone" required placeholder="0912345678">
-    
-            <label for="date">日期：</label>
-            <input type="date" id="date" name="date" required>
-    
-            <label for="time">時間：</label>
-            <input type="time" id="time" name="time" required>
-    
-            <label for="adults">大人數量：</label>
-            <input type="number" id="adults" name="adults" required min="1">
-    
-            <label for="children">小孩數量：</label>
-            <input type="number" id="children" name="children" min="0" value="0">
-    
-            <div id="highChairDiv" style="display: none;">
-                <label for="highChair">兒童椅數量：</label>
-                <input type="number" id="highChair" name="highChair" min="0">
-            </div>
-    
-            <button type="submit">提交訂位</button>
-            <p id="message" style="color: red;"></p>
-            <p id="successMessage" style="display: none; color: green;">訂位成功！</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>訂位系統</title>
+</head>
+<body>
+    <h1>訂位系統</h1>
+    <form id="reservationForm" action="/reservations" method="POST">
+        <label for="name">姓名：</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="phone">電話：</label>
+        <input type="text" id="phone" name="phone" required placeholder="0912345678">
+
+        <label for="date">日期：</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">時間：</label>
+        <input type="time" id="time" name="time" required>
+
+        <label for="adults">大人數量：</label>
+        <input type="number" id="adults" name="adults" required min="1">
+
+        <label for="children">小孩數量：</label>
+        <input type="number" id="children" name="children" min="0" value="0">
+
+        <div id="highChairDiv" style="display: none;">
+            <label for="highChair">兒童椅數量：</label>
+            <input type="number" id="highChair" name="highChair" min="0">
+        </div>
+
+        <button type="submit">提交訂位</button>
+        <p id="message" style="color: red;"></p>
+        <p id="successMessage" style="display: none; color: green;">訂位成功！</p>
+    </form>
+
+    <button id="viewReservationsBtn">查看訂位</button>
+
+    <div id="passwordModal" style="display:none;">
+        <form id="passwordForm" action="/protected-views" method="POST">
+            <label for="password">密碼：</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">確認</button>
         </form>
-    
-        <button onclick="location.href='/view'">查看訂位</button>
-        
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="script.js"></script>
-    </body>
-    </html>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
