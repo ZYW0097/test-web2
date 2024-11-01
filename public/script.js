@@ -10,18 +10,6 @@ document.getElementById('children').addEventListener('change', function () {
     }
 });
 
-// 限制訂位時間選擇
-document.getElementById('time').addEventListener('change', function () {
-    const timeValue = this.value;
-    const [hours, minutes] = timeValue.split(':').map(Number);
-
-    // 檢查是否在允許的時間範圍內
-    if ((hours < 11 || (hours === 15 && minutes > 30) || hours > 20)) {
-        alert('請選擇上午11點至下午3點或下午5點至晚上8點的時間');
-        this.value = ''; // 清空選擇的時間
-    }
-});
-
 // 檢查日期限制
 document.getElementById('date').addEventListener('change', function () {
     const today = new Date();
