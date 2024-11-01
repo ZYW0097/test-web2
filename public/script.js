@@ -1,4 +1,3 @@
-// 當選擇小孩數量時顯示或隱藏高腳椅的選項
 document.getElementById('children').addEventListener('change', function () {
     const highChairDiv = document.getElementById('highChairDiv');
     const childrenCount = this.value;
