@@ -118,13 +118,15 @@ select:focus {
 
 button[type="submit"] {
     margin-top: 20px;
-    padding: 10px;
+    padding: 8px 16px; /* 調整內邊距以縮小按鈕大小 */
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     transition: background-color 0.3s; /* 加入平滑過渡效果 */
+    display: block; /* 將按鈕設為區塊元素 */
+    margin-left: auto; /* 左側邊距自動 */
+    margin-right: auto; /* 右側邊距自動，從而實現居中 */
 }
 
 button[type="submit"]:hover {
