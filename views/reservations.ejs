@@ -26,11 +26,12 @@
                     <p>成人: <%= reservation.adults %></p>
                     <p>小孩: <%= reservation.children || 0 %></p>
                     <p>兒童椅: <%= reservation.highChair || 0 %></p>
+                    <% if (reservation.note) { %> <!-- 檢查備註是否存在 -->
+                        <p>備註: <%= reservation.note %></p> <!-- 顯示備註 -->
+                    <% } %>
                 </div>
             <% }) %>
         <% } %>
-    </div>
-        <% }) %>
     </div>
 </body>
 </html>
