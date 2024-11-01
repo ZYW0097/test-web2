@@ -47,29 +47,37 @@ const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings')
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
 app.post('/reservations', async (req, res) => {
     const { name, phone, email, gender, date, time, adults, children, highChair, note } = req.body;
 
+    // 驗證電話格式
     const phoneRegex = /^09\d{8}$/;
     if (!phoneRegex.test(phone)) {
         return res.status(400).json({ message: '電話格式不正確，請使用台灣手機格式' });
     }
 
+    // 驗證日期是否選擇今天以前
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (new Date(date) < today) {
         return res.status(400).json({ message: '日期不能選擇今天以前' });
     }
 
+    // 驗證兒童椅數量是否超過小孩數量
     if (children > 0 && highChair > children) {
         return res.status(400).json({ message: '兒童椅數量不能大於小孩數量' });
     }
 
+    // 驗證電子郵件格式
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return res.status(400).json({ message: '電子郵件格式不正確' });
-}
+    }
+
+    // 檢查是否選擇了時間
+    if (!time) {
+        return res.status(400).json({ message: '請選擇用餐時間。' });
+    }
 
     try {
         const reservation = new Reservation({ name, phone, email, gender, date, time, adults, children, highChair });
