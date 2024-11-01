@@ -37,6 +37,7 @@ const reservationSchema = new mongoose.Schema({
     adults: { type: Number, required: true },
     children: { type: Number, required: true },
     highChair: { type: Number, default: 0 },
+    note: { type: String }  // 新增備註欄位，選填
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings');
@@ -47,7 +48,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/reservations', async (req, res) => {
-    const { name, phone, email, gender, date, time, adults, children, highChair } = req.body;
+    const { name, phone, email, gender, date, time, adults, children, highChair, note } = req.body;
 
     const phoneRegex = /^09\d{8}$/;
     if (!phoneRegex.test(phone)) {
