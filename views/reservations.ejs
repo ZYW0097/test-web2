@@ -25,6 +25,7 @@
                     <p>成人: <%= reservation.adults %></p>
                     <p>小孩: <%= reservation.children || 0 %></p>
                     <p>兒童椅: <%= reservation.highChair || 0 %></p>
+                    <p>備註: <%= reservation.notes || '無' %></p>
                 </div>
             <% }); %>
         <% } %>
