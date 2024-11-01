@@ -9,19 +9,27 @@
     <h1>訂位列表</h1>
 
     <div class="reservations-container">
-        <% reservations.reverse().forEach(reservation => { %>
-            <div class="reservation-card">
-                <p>名稱: <%= reservation.name %></p>
-                <p>電話: <%= reservation.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1-$2-$3') %></p> <!-- 格式化電話 -->
-                <p>
-                    日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %>
-                    (<%= ['日', '一', '二', '三', '四', '五', '六'][new Date(reservation.date).getDay()] %>) <!-- 星期幾 -->
-                </p>
-                <p>時間: <%= formatTime(reservation.time) %></p> <!-- 格式化時間 -->
-                <p>成人: <%= reservation.adults %></p>
-                <p>小孩: <%= reservation.children || 0 %></p>
-                <p>兒童椅: <%= reservation.highChair || 0 %></p>
-            </div>
+        <% if (reservations.length === 0) { %>
+            <p>目前沒有任何訂位。</p>
+        <% } else { %>
+            <% reservations.reverse().forEach(reservation => { %>
+                <div class="reservation-card">
+                    <p>名稱: <%= reservation.name %></p>
+                    <p>電話: <%= reservation.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1-$2-$3') %></p> <!-- 格式化電話 -->
+                    <p>電子郵件: <%= reservation.email %></p> <!-- 顯示電子郵件 -->
+                    <p>性別: <%= reservation.gender %></p> <!-- 顯示性別 -->
+                    <p>
+                        日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %>
+                        (<%= ['日', '一', '二', '三', '四', '五', '六'][new Date(reservation.date).getDay()] %>) <!-- 星期幾 -->
+                    </p>
+                    <p>時間: <%= formatTime(reservation.time) %></p>
+                    <p>成人: <%= reservation.adults %></p>
+                    <p>小孩: <%= reservation.children || 0 %></p>
+                    <p>兒童椅: <%= reservation.highChair || 0 %></p>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
         <% }) %>
     </div>
 </body>
