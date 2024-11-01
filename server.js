@@ -47,6 +47,7 @@ const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings')
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 app.post('/reservations', async (req, res) => {
     const { name, phone, email, gender, date, time, adults, children, highChair, note } = req.body;
 
@@ -75,7 +76,7 @@ app.post('/reservations', async (req, res) => {
     }
 
     // 檢查是否選擇了時間
-    if (!time) {
+    if (!time || time.trim() === "") {
         return res.status(400).json({ message: '請選擇用餐時間。' });
     }
 
@@ -84,7 +85,7 @@ app.post('/reservations', async (req, res) => {
         await reservation.save();
         res.status(201).json({ message: '訂位成功' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: '訂位失敗，請稍後再試。', error: error.message }); // 500 是伺服器錯誤，適用於保存失敗的情況
     }
 });
 
