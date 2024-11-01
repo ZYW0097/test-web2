@@ -1,11 +1,12 @@
+// 當選擇小孩數量時顯示或隱藏高腳椅的選項
 document.getElementById('children').addEventListener('change', function () {
     const highChairDiv = document.getElementById('highChairDiv');
     const childrenCount = this.value;
 
     if (childrenCount > 0) {
-        highChairDiv.style.display = 'block';
+        highChairDiv.style.display = 'block'; // 顯示高腳椅選項
     } else {
-        highChairDiv.style.display = 'none';
+        highChairDiv.style.display = 'none'; // 隱藏高腳椅選項
         document.getElementById('highChair').value = ''; // 清空兒童椅數量
     }
 });
@@ -19,6 +20,7 @@ document.getElementById('date').addEventListener('change', function () {
     if (selectedDate < today) {
         alert('日期不能選擇今天以前的日期');
         this.value = ''; // 清空選擇的日期
+        document.getElementById('contactInfoDiv').style.display = 'none'; // 隱藏聯絡資訊區域
     } else {
         // 顯示聯絡資訊填寫區域
         document.getElementById('contactInfoDiv').style.display = 'block';
@@ -70,12 +72,12 @@ $(document).ready(function () {
         // 判斷是平日(星期一到五)或假日(星期六和星期天)並生成對應的時間按鈕
         if (dayOfWeek >= 1 && dayOfWeek <= 5) {
             // 平日
-            createTimeButtons("11:00", "13:30", 15); // 午餐時段
-            createTimeButtons("17:00", "20:00", 15); // 晚餐時段
+            createTimeButtons("11:00", "13:30", 15, "午餐時段 - 上午"); // 午餐時段
+            createTimeButtons("17:00", "20:00", 15, "晚餐時段 - 下午"); // 晚餐時段
         } else {
             // 假日
-            createTimeButtons("11:00", "14:30", 15); // 更新假日的中午時段
-            createTimeButtons("17:00", "20:00", 15); // 晚餐時段
+            createTimeButtons("11:00", "14:30", 15, "午餐時段 - 上午"); // 更新假日的中午時段
+            createTimeButtons("17:00", "20:00", 15, "晚餐時段 - 下午"); // 晚餐時段
         }
 
         // 顯示時間選擇器容器
@@ -84,10 +86,13 @@ $(document).ready(function () {
 });
 
 // 根據開始時間、結束時間和間隔生成時間按鈕
-function createTimeButtons(startTime, endTime, interval) {
+function createTimeButtons(startTime, endTime, interval, timeLabel) {
     const start = new Date(`1970-01-01T${startTime}:00`);
     const end = new Date(`1970-01-01T${endTime}:00`);
-    
+
+    // 顯示時間標籤
+    $('#time-buttons').append(`<h3>${timeLabel}</h3>`); // 加入上午或下午標籤
+
     for (let time = start; time <= end; time.setMinutes(time.getMinutes() + interval)) {
         const timeString = time.toTimeString().slice(0, 5); // 取HH:MM格式
         $('#time-buttons').append(`<button type="button" class="time-button" data-time="${timeString}">${timeString}</button>`);
@@ -102,12 +107,12 @@ function createTimeButtons(startTime, endTime, interval) {
     });
 }
 
-
+// 顯示密碼模態框
 document.getElementById('viewReservationsBtn').addEventListener('click', function() {
-    // 顯示密碼模態框
     document.getElementById('passwordModal').style.display = 'block';
 });
 
+// 提交密碼表單
 document.getElementById('passwordForm').addEventListener('submit', function(e) {
     e.preventDefault(); // 防止默認提交行為
     const password = this.password.value;
@@ -121,9 +126,9 @@ document.getElementById('passwordForm').addEventListener('submit', function(e) {
     })
     .then(response => {
         if (response.redirected) {
-            window.location.href = response.url; // 轉向新的 URL
+            window.location.href = response.url; // 密碼正確，重定向到 reservations
         } else {
-            return response.text().then(text => alert(text)); // 錯誤消息
+            return response.text().then(text => alert(text)); // 顯示錯誤消息
         }
     });
 });
