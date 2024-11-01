@@ -86,19 +86,24 @@ select:focus {
     margin-top: 10px;
 }
 
-.time-buttons button {
-    flex: 1 1 20%; /* 每個按鈕在容器中佔據的空間 */
+.time-button {
+    background-color: #f0f0f0; /* 未選擇時的顏色 */
+    border: 1px solid #ccc;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    margin: 5px;
     cursor: pointer;
     text-align: center; /* 按鈕文字居中 */
     transition: background-color 0.3s, transform 0.3s; /* 加入平滑過渡效果 */
+    border-radius: 5px; /* 添加圓角 */
 }
 
-.time-buttons button:hover {
+.time-button.selected {
+    background-color: #4CAF50; /* 選擇時的顏色 */
+    color: white; /* 按鈕文字顏色 */
+    border: 1px solid #4CAF50; /* 邊框顏色 */
+}
+
+.time-button:hover {
     background-color: #0056b3; /* 按鈕懸停顏色 */
     transform: scale(1.05); /* 懸停時輕微放大 */
 }
@@ -137,7 +142,7 @@ button[type="submit"]:hover {
         width: 90%;
     }
 
-    .time-buttons button {
+    .time-button {
         flex: 1 1 45%; /* 確保在小螢幕上按鈕適當換行 */
     }
 }
