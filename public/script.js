@@ -101,9 +101,13 @@ function createTimeButtons(startTime, endTime, interval, timeLabel) {
     // 為每個生成的時間按鈕添加事件監聽器，以選擇時間
     $('.time-button').on('click', function() {
         // 移除其他按鈕的選中狀態
-        $('.time-button').removeClass('selected');
+        $('.time-button').removeClass('selected'); // 清除已選擇的按鈕樣式
         // 設置選中按鈕樣式
-        $(this).addClass('selected');
+        $(this).addClass('selected'); // 為當前選中的按鈕添加樣式
+        
+        // 你可以在這裡進行其他操作，例如保存選中的時間
+        const selectedTime = $(this).data('time'); // 獲取選中的時間
+        console.log("選擇的時間:", selectedTime); // 可以替換成你需要的邏輯
     });
 }
 
