@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static('images')); // 提供 images 資料夾中的圖片
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
