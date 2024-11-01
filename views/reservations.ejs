@@ -14,10 +14,9 @@
         <% } else { %>
             <% reservations.reverse().forEach(reservation => { %>
                 <div class="reservation-card">
-                    <p>名稱: <%= reservation.name %></p>
+                    <p>名稱: <%= reservation.name %> <%= reservation.gender %></p>
                     <p>電話: <%= reservation.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1-$2-$3') %></p>
                     <p>電子郵件: <%= reservation.email %></p>
-                    <p>性別: <%= reservation.gender %></p>
                     <p>
                         日期: <%= new Date(reservation.date).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) %>
                         (<%= ['日', '一', '二', '三', '四', '五', '六'][new Date(reservation.date).getDay()] %>)
