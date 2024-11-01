@@ -101,3 +101,23 @@ function createTimeButtons(startTime, endTime, interval) {
         $(this).addClass('selected');
     });
 }
+
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // 防止默認提交行為
+    const password = this.password.value;
+
+    fetch('/protected-views', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password })
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // 轉向新的 URL
+        } else {
+            return response.text().then(text => alert(text)); // 錯誤消息
+        }
+    });
+});
