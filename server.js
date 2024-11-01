@@ -30,6 +30,8 @@ connectToDatabase();
 const reservationSchema = new mongoose.Schema({
     name: { type: String, required: true },
     phone: { type: String, required: true },
+    email: { type: String, required: true },
+    gender: { type: String, required: true },
     date: { type: Date, required: true },
     time: { type: String, required: true },
     adults: { type: Number, required: true },
@@ -44,29 +46,26 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 訂位表單提交
 app.post('/reservations', async (req, res) => {
-    const { name, phone, date, time, adults, children, highChair } = req.body;
+    const { name, phone, email, gender, date, time, adults, children, highChair } = req.body;
 
-    // 驗證電話格式
     const phoneRegex = /^09\d{8}$/;
     if (!phoneRegex.test(phone)) {
         return res.status(400).json({ message: '電話格式不正確，請使用台灣手機格式' });
     }
 
-    // 檢查日期是否為今天以前
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     if (new Date(date) < today) {
         return res.status(400).json({ message: '日期不能選擇今天以前' });
     }
 
-    // 檢查兒童椅數量
     if (children > 0 && highChair > children) {
         return res.status(400).json({ message: '兒童椅數量不能大於小孩數量' });
     }
 
     try {
-        const reservation = new Reservation({ name, phone, date, time, adults, children, highChair });
+        const reservation = new Reservation({ name, phone, email, gender, date, time, adults, children, highChair });
         await reservation.save();
         res.status(201).json({ message: '訂位成功' });
     } catch (error) {
@@ -85,15 +84,6 @@ app.post('/protected-views', (req, res) => {
     }
 });
 
-// 格式化時間的函數
-const formatTime = (time) => {
-    const [hour, minute] = time.split(':');
-    const hourInt = parseInt(hour);
-    const suffix = hourInt >= 12 ? '下午' : '上午';
-    const formattedHour = hourInt % 12 || 12; // 12小時制
-    return `${formattedHour}:${minute} ${suffix}`;
-};
-
 // 查看訂位頁面
 app.get('/view', async (req, res) => {
     // 檢查 session 是否存在
@@ -103,13 +93,20 @@ app.get('/view', async (req, res) => {
 
     try {
         const reservations = await Reservation.find();
-        // 將 formatTime 函數傳遞給 EJS
-        res.render('reservations', { reservations, formatTime }); 
+        res.render('reservations', { reservations });
     } catch (err) {
         console.error('Error fetching reservations:', err);
         res.status(500).json({ message: '無法載入訂位資料' });
     }
 });
+
+const formatTime = (time) => {
+    const [hour, minute] = time.split(':');
+    const hourInt = parseInt(hour);
+    const suffix = hourInt >= 12 ? '下午' : '上午';
+    const formattedHour = hourInt % 12 || 12; // 12小時制
+    return `${formattedHour}:${minute} ${suffix}`;
+};
 
 // 啟動伺服器
 app.listen(PORT, () => {
