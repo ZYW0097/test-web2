@@ -102,6 +102,12 @@ function createTimeButtons(startTime, endTime, interval) {
     });
 }
 
+
+document.getElementById('viewReservationsBtn').addEventListener('click', function() {
+    // 顯示密碼模態框
+    document.getElementById('passwordModal').style.display = 'block';
+});
+
 document.getElementById('passwordForm').addEventListener('submit', function(e) {
     e.preventDefault(); // 防止默認提交行為
     const password = this.password.value;
