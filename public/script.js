@@ -104,8 +104,9 @@ function createTimeButtons(startTime, endTime, interval, timeLabel) {
         // 設置選中按鈕樣式
         $(this).addClass('selected'); // 為當前選中的按鈕添加樣式
         
-        // 你可以在這裡進行其他操作，例如保存選中的時間
+        // 儲存選中的時間到隱藏的輸入框
         const selectedTime = $(this).data('time'); // 獲取選中的時間
+        $('#selectedTime').val(selectedTime); // 設置隱藏輸入框的值
         console.log("選擇的時間:", selectedTime); // 可以替換成你需要的邏輯
     });
 }
