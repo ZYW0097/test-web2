@@ -1,4 +1,3 @@
-// 顯示或隱藏兒童椅選擇區
 document.getElementById('children').addEventListener('change', function () {
     const highChairDiv = document.getElementById('highChairDiv');
     const childrenCount = this.value;
@@ -71,8 +70,8 @@ const yyyy = today.getFullYear();
 const currentDate = `${yyyy}-${mm}-${dd}`;
 document.getElementById('date').setAttribute('min', currentDate);
 
+// 當選擇日期時，根據平日或假日生成時間按鈕
 $(document).ready(function () {
-    // 當選擇日期時，判斷是平日還是假日
     $('#date').change(function () {
         const selectedDate = new Date($(this).val());
         const dayOfWeek = selectedDate.getDay(); // 0=星期天, 1=星期一, ..., 6=星期六
@@ -80,29 +79,37 @@ $(document).ready(function () {
         // 清空時間按鈕
         $('#time-buttons').empty();
 
-        // 檢查是平日(星期一到五)或假日(星期六和星期天)
+        // 判斷是平日(星期一到五)或假日(星期六和星期天)並生成對應的時間按鈕
         if (dayOfWeek >= 1 && dayOfWeek <= 5) {
             // 平日
-            createTimeButtons("11:00", "13:30", 15);
-            createTimeButtons("17:00", "20:00", 15);
+            createTimeButtons("11:00", "13:30", 15); // 午餐時段
+            createTimeButtons("17:00", "20:00", 15); // 晚餐時段
         } else {
             // 假日
             createTimeButtons("11:00", "14:30", 15); // 更新假日的中午時段
-            createTimeButtons("17:00", "20:00", 15);
+            createTimeButtons("17:00", "20:00", 15); // 晚餐時段
         }
 
-        // 顯示時間選擇器
+        // 顯示時間選擇器容器
         $('#time-picker-container').show();
     });
-
-    // 根據開始時間、結束時間和間隔生成按鈕
-    function createTimeButtons(startTime, endTime, interval) {
-        const start = new Date(`1970-01-01T${startTime}:00`);
-        const end = new Date(`1970-01-01T${endTime}:00`);
-        
-        for (let time = start; time <= end; time.setMinutes(time.getMinutes() + interval)) {
-            const timeString = time.toTimeString().slice(0, 5); // 取HH:MM
-            $('#time-buttons').append(`<button type="button" class="time-button">${timeString}</button>`);
-        }
-    }
 });
+
+// 根據開始時間、結束時間和間隔生成時間按鈕
+function createTimeButtons(startTime, endTime, interval) {
+    const start = new Date(`1970-01-01T${startTime}:00`);
+    const end = new Date(`1970-01-01T${endTime}:00`);
+    
+    for (let time = start; time <= end; time.setMinutes(time.getMinutes() + interval)) {
+        const timeString = time.toTimeString().slice(0, 5); // 取HH:MM格式
+        $('#time-buttons').append(`<button type="button" class="time-button" data-time="${timeString}">${timeString}</button>`);
+    }
+
+    // 為每個生成的時間按鈕添加事件監聽器，以選擇時間
+    $('.time-button').on('click', function() {
+        // 移除其他按鈕的選中狀態
+        $('.time-button').removeClass('selected');
+        // 設置選中按鈕樣式
+        $(this).addClass('selected');
+    });
+}
