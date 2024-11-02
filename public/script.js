@@ -1,13 +1,42 @@
-document.getElementById('children').addEventListener('change', function () {
-    const highChairDiv = document.getElementById('highChairDiv');
-    const childrenCount = this.value;
+document.addEventListener('DOMContentLoaded', function () {
+    // 生成選項
+    const adultsSelect = document.getElementById('adults');
+    const childrenSelect = document.getElementById('children');
+    const highChairSelect = document.getElementById('highChair');
 
-    if (childrenCount > 0) {
-        highChairDiv.style.display = 'block'; // 顯示高腳椅選項
-    } else {
-        highChairDiv.style.display = 'none'; // 隱藏高腳椅選項
-        document.getElementById('highChair').value = ''; // 清空兒童椅數量
+    for (let i = 0; i <= 20; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        adultsSelect.appendChild(option);
     }
+
+    for (let i = 0; i <= 20; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        childrenSelect.appendChild(option);
+    }
+
+    for (let i = 0; i <= 10; i++) { // 兒童椅最多10個
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        highChairSelect.appendChild(option);
+    }
+
+    // 監聽小孩數量變更事件
+    childrenSelect.addEventListener('change', function () {
+        const highChairField = document.getElementById('highChairField');
+        const childrenCount = this.value;
+
+        if (childrenCount > 0) {
+            highChairField.style.display = 'block'; // 顯示兒童椅選項
+        } else {
+            highChairField.style.display = 'none'; // 隱藏兒童椅選項
+            highChairSelect.value = ''; // 清空兒童椅數量
+        }
+    });
 });
 
 // 檢查日期限制
@@ -20,9 +49,12 @@ document.getElementById('date').addEventListener('change', function () {
         alert('日期不能選擇今天以前的日期');
         this.value = ''; // 清空選擇的日期
         document.getElementById('contactInfoDiv').style.display = 'none'; // 隱藏聯絡資訊區域
+        $('#time-picker-container').hide(); // 隱藏時間選擇器容器
     } else {
         // 顯示聯絡資訊填寫區域
         document.getElementById('contactInfoDiv').style.display = 'block';
+        $('#time-picker-container').show(); // 顯示時間選擇器容器
+        updateTimeButtons(); // 更新時間按鈕
     }
 });
 
@@ -39,6 +71,7 @@ document.getElementById('reservationForm').addEventListener('submit', function (
             document.getElementById('message').innerText = ''; // 清空任何錯誤消息
             $('#reservationForm')[0].reset(); // 清除表單
             document.getElementById('contactInfoDiv').style.display = 'none'; // 隱藏聯絡資訊區域
+            $('#time-picker-container').hide(); // 隱藏時間選擇器容器
             
             // 延遲1秒後重新載入頁面
             setTimeout(() => {
@@ -59,52 +92,51 @@ const yyyy = today.getFullYear();
 const currentDate = `${yyyy}-${mm}-${dd}`;
 document.getElementById('date').setAttribute('min', currentDate);
 
-// 當選擇日期時，根據平日或假日生成時間按鈕
-$(document).ready(function () {
-    $('#date').change(function () {
-        const selectedDate = new Date($(this).val());
-        const dayOfWeek = selectedDate.getDay(); // 0=星期天, 1=星期一, ..., 6=星期六
+// 更新時間按鈕函數
+function updateTimeButtons() {
+    const selectedDate = new Date($('#date').val());
+    const dayOfWeek = selectedDate.getDay();
 
-        // 清空時間按鈕
-        $('#time-buttons').empty();
+    // 清空時間按鈕
+    $('#time-picker-container').empty(); // 清空容器
 
-        // 判斷是平日(星期一到五)或假日(星期六和星期天)並生成對應的時間按鈕
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-            // 平日
-            createTimeButtons("11:00", "13:30", 15, "午餐時段 - 上午"); // 午餐時段
-            createTimeButtons("17:00", "20:00", 15, "晚餐時段 - 下午"); // 晚餐時段
-        } else {
-            // 假日
-            createTimeButtons("11:00", "14:30", 15, "午餐時段 - 上午"); // 更新假日的中午時段
-            createTimeButtons("17:00", "20:00", 15, "晚餐時段 - 下午"); // 晚餐時段
-        }
+    // 生成時間按鈕
+    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+        createTimeButtons("11:00", "13:30", 35, "平日上午");
+        createTimeButtons("17:00", "20:30", 35, "平日下午");
+    } else {
+        createTimeButtons("11:00", "14:30", 30, "假日上午");
+        createTimeButtons("17:00", "20:30", 30, "假日下午");
+    }
 
-        // 顯示時間選擇器容器
-        $('#time-picker-container').show();
-    });
-});
+    $('#time-picker-container').show();
+}
 
 // 根據開始時間、結束時間和間隔生成時間按鈕
 function createTimeButtons(startTime, endTime, interval, timeLabel) {
     const start = new Date(`1970-01-01T${startTime}:00`);
     const end = new Date(`1970-01-01T${endTime}:00`);
 
-    // 顯示時間標籤
-    $('#time-buttons').append(`<h3>${timeLabel}</h3>`); // 加入上午或下午標籤
+    // 創建新的容器來放置標題和按鈕
+    const timeContainer = $('<div class="time-container"></div>');
+    timeContainer.append(`<h3>${timeLabel}</h3>`); // 加入上午或下午標籤
+
+    const buttonRow = $('<div class="time-buttons"></div>'); // 新的按鈕行容器
 
     for (let time = start; time <= end; time.setMinutes(time.getMinutes() + interval)) {
         const timeString = time.toTimeString().slice(0, 5); // 取HH:MM格式
-        $('#time-buttons').append(`<button type="button" class="time-button" data-time="${timeString}">${timeString}</button>`);
+        buttonRow.append(`<button type="button" class="time-button" data-time="${timeString}">${timeString}</button>`);
     }
+
+    // 將按鈕行添加到時間容器中
+    timeContainer.append(buttonRow);
+    $('#time-picker-container').append(timeContainer); // 將整個容器添加到主容器中
 
     // 為每個生成的時間按鈕添加事件監聽器，以選擇時間
     $('.time-button').on('click', function() {
-        // 移除其他按鈕的選中狀態
         $('.time-button').removeClass('selected'); // 清除已選擇的按鈕樣式
-        // 設置選中按鈕樣式
         $(this).addClass('selected'); // 為當前選中的按鈕添加樣式
         
-        // 儲存選中的時間到隱藏的輸入框
         const selectedTime = $(this).data('time'); // 獲取選中的時間
         $('#selectedTime').val(selectedTime); // 設置隱藏輸入框的值
         console.log("選擇的時間:", selectedTime); // 可以替換成你需要的邏輯
