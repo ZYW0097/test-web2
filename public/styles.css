@@ -69,43 +69,35 @@ select:focus {
     margin-top: 15px; /* 添加間距 */
 }
 
-#gender-container label {
-    margin-right: 15px; /* 性別選擇的標籤之間的間距 */
-}
-
-#time-picker-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 15px;
-}
-
 .time-buttons {
-    display: flex;
-    flex-wrap: wrap; /* 使按鈕在空間不足時換行 */
-    gap: 10px; /* 按鈕之間的間距 */
-    margin-top: 10px;
+    display: flex;          
+    flex-wrap: wrap;       
+    gap: 10px;             
 }
 
 .time-button {
-    background-color: #f0f0f0; /* 未選擇時的顏色 */
+    flex: 1 1 40%;         /* 按鈕的大小，這裡設置為 30% */
+    min-width: 100px;      /* 設置按鈕的最小寬度 */
+    background-color: #f0f0f0;
     border: 1px solid #ccc;
     padding: 10px;
-    margin: 5px;
     cursor: pointer;
-    text-align: center; /* 按鈕文字居中 */
-    transition: background-color 0.3s, transform 0.3s; /* 加入平滑過渡效果 */
-    border-radius: 5px; /* 添加圓角 */
+    text-align: center;     
+    transition: background-color 0.3s, transform 0.3s; 
+    border-radius: 5px;     
 }
 
+/* 選擇按鈕的樣式 */
 .time-button.selected {
-    background-color: #4CAF50; /* 選擇時的顏色 */
-    color: white; /* 按鈕文字顏色 */
-    border: 1px solid #4CAF50; /* 邊框顏色 */
+    background-color: #4CAF50; 
+    color: white;              
+    border: 1px solid #4CAF50; 
 }
 
 .time-button:hover {
-    background-color: #0056b3; /* 按鈕懸停顏色 */
-    transform: scale(1.05); /* 懸停時輕微放大 */
+    background-color: #4CAF50; /* 懸停時與選擇時的顏色相同 */
+    color: white;              /* 按鈕文字顏色 */
+    transform: scale(1.05);     
 }
 
 #reservation-summary {
@@ -139,12 +131,31 @@ button[type="submit"]:hover {
     margin-top: 10px;
 }
 
-@media (max-width: 768px) {
-    .container {
-        width: 90%;
-    }
+.row {
+    display: flex;
+    gap: 10px; /* 欄位之間的間距 */
+    margin-bottom: 10px; /* 行間距 */
+}
 
+/* 欄位排列設置 */
+.field {
+    flex: 1; /* 平均分配空間 */
+}
+
+/* 日期欄位佔用更多空間 */
+.date-field {
+    flex: 2; /* 默認佔兩份空間 */
+}
+
+@media (max-width: 768px) {
     .time-button {
-        flex: 1 1 45%; /* 確保在小螢幕上按鈕適當換行 */
+        flex: 1 1 40%;         /* 每行最多顯示 3 個按鈕 */
+    }
+}
+
+/* 媒體查詢：當螢幕寬度小於 480px 時，每行顯示 1 個按鈕 */
+@media (max-width: 480px) {
+    .time-button {
+        flex: 1 1 100%;        /* 每行顯示 1 個按鈕 */
     }
 }
