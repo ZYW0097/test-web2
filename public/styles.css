@@ -156,6 +156,6 @@ button[type="submit"]:hover {
 /* 媒體查詢：當螢幕寬度小於 480px 時，每行顯示 1 個按鈕 */
 @media (max-width: 480px) {
     .time-button {
-        flex: 1 1 100%;        /* 每行顯示 1 個按鈕 */
+        flex: 1 1 40%;        /* 每行顯示 1 個按鈕 */
     }
 }
