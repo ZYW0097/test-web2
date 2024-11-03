@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
-const session = require('express-session'); // 引入 express-session
+const session = require('express-session');
 require('dotenv').config();
 
 const connectToDatabase = require('./database');
@@ -13,13 +13,13 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static('images')); // 提供 images 資料夾中的圖片
+app.use('/images', express.static('images'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // 設定 session
 app.use(session({
-    secret: 'your-secret-key', // 替換為您的秘密金鑰
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
 }));
@@ -38,7 +38,7 @@ const reservationSchema = new mongoose.Schema({
     adults: { type: Number, required: true },
     children: { type: Number, required: true },
     highChair: { type: Number, default: 0 },
-    notes: { type: String }  // 新增備註欄位，選填
+    notes: { type: String }
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings');
@@ -81,11 +81,11 @@ app.post('/reservations', async (req, res) => {
     }
 
     try {
-        const reservation = new Reservation({ name, phone, email, gender, date, time, adults, children, highChair });
+        const reservation = new Reservation({ name, phone, email, gender, date, time, adults, children, highChair, notes });
         await reservation.save();
         res.status(201).json({ message: '訂位成功' });
     } catch (error) {
-        res.status(500).json({ message: '訂位失敗，請稍後再試。', error: error.message }); // 500 是伺服器錯誤，適用於保存失敗的情況
+        res.status(500).json({ message: '訂位失敗，請稍後再試。', error: error.message });
     }
 });
 
@@ -100,7 +100,6 @@ app.post('/protected-views', (req, res) => {
     }
 });
 
-// 查看訂位頁面
 app.get('/view', async (req, res) => {
     // 檢查 session 是否存在
     if (!req.session.passwordCorrect) {
